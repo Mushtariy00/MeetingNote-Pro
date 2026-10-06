@@ -1,0 +1,6 @@
+{
+  "doc_rules": true,
+  "extensions": [".md", ".txt", ".pptx"],
+  "skip_dirs": [".git", ".claude", "node_modules", ".venv", "venv", "__pycache__", "dist", "build", ".pytest_cache", "openspec", "publish"],
+  "skip_files": ["TODO.md", "CLAUDE.md"]
+}
