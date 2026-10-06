@@ -11,3 +11,4 @@
 - [x] 투두가드로 프로젝트 세팅 (TODO.md, 훅 4개, settings.json, todo-guard.json, CLAUDE.md)
 - [x] git 저장소 만들고 첫 커밋
 - [ ] GitHub 저장소 meetingnote-pro 에 연결하고 push — GitHub 에 저장소가 아직 없음. 웹에서 만든 뒤 push
+- [x] OpenSpec 초기화 (openspec init --tools claude)
