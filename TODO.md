@@ -13,3 +13,4 @@
 - [ ] GitHub 저장소 meetingnote-pro 에 연결하고 push — GitHub 에 저장소가 아직 없음. 웹에서 만든 뒤 push
 - [x] OpenSpec 초기화 (openspec init --tools claude)
 - [x] openspec/config.yaml 에 specs 규칙 추가 (스토리보드 ID + 퍼블리싱 파일 주석, 영어로)
+- [x] /opsx:propose add-mvp-core (Gemini 확정, Swagger · pytest · 수락 항목 반영)

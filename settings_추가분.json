@@ -1,0 +1,19 @@
+{
+  "_설명": "아래 두 묶음을 .claude/settings.json 의 hooks 안에 그대로 넣는다. 투두가드 훅이 이미 있으면 그 아래에 덧붙인다.",
+  "_경로": "<프로젝트>/.claude/hooks/session-log.sh 의 전체 경로로 바꿔 적는다.",
+
+  "SessionStart": [
+    {
+      "hooks": [
+        { "type": "command", "command": ". \"D:/claude-test/.claude/hooks/session-log.sh\" start" }
+      ]
+    }
+  ],
+  "SessionEnd": [
+    {
+      "hooks": [
+        { "type": "command", "command": ". \"D:/claude-test/.claude/hooks/session-log.sh\" end" }
+      ]
+    }
+  ]
+}
