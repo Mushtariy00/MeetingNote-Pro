@@ -14,3 +14,6 @@
 - [x] OpenSpec 초기화 (openspec init --tools claude)
 - [x] openspec/config.yaml 에 specs 규칙 추가 (스토리보드 ID + 퍼블리싱 파일 주석, 영어로)
 - [x] /opsx:propose add-mvp-core (Gemini 확정, Swagger · pytest · 수락 항목 반영)
+- [x] 키 세팅: .env (STT_API_KEY 빈칸, STT_MODEL, JWT_SECRET 생성) + .env.example
+- [x] STT_MODEL = gemini-3.1-flash-lite 로 design.md · tasks.md 반영
+- [ ] STT_API_KEY 에 Gemini 키 넣기 (사용자)

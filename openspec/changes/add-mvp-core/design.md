@@ -74,12 +74,13 @@ A helper loads the resource and the user's membership and raises the right code:
 `MN-` plus 4 characters from `A-Z` and `0-9`, generated with `secrets.choice` and regenerated on the rare collision with the unique index. Joining a full team (6 members) gives `409 TEAM_FULL`.
 
 ### Speech-to-text with Gemini
-`stt.py` uses the Google Gen AI SDK (`google-genai`), with the key from `STT_API_KEY` and the model from `STT_MODEL`. The default is a current Flash model, and its exact name is confirmed against Gemini's model list when the backend is built. It does two calls with the same model, as the definition requires:
+`stt.py` uses the Google Gen AI SDK (`google-genai`), with the key from `STT_API_KEY` and the model from `STT_MODEL`, which defaults to `gemini-3.1-flash-lite`. It does two calls with the same model, as the definition requires:
 1. **Transcribe**: send the audio and ask for a plain Korean transcript.
 2. **Split**: send the transcript and ask for JSON with `summary` (string), `decisions` (list of strings) and `todos` (list of `{what, assignee, due_text}`), enforced with the SDK's response schema. The prompt tells it to leave a list empty and an assignee null when the text does not state one.
 
 Transcription happens in `POST /api/upload`. The split happens when the meeting is saved, so the user can correct the transcript first.
-- *Alternative:* OpenAI Whisper plus a separate model for the split. Rejected in explore: two providers, and the definition asks for the same model.
+- *Model choice:* `gemini-3.1-flash-lite` is a stable model that accepts audio and returns text, so it can do both calls. It is the user's choice: cheaper and faster than the larger Flash models.
+- *Alternatives:* `gemini-3.8-flash`, the current main Flash model, is likely better at splitting a long or messy transcript, and it can be swapped in through `STT_MODEL` with no code change. `gemini-3.5-transcribe` only transcribes, so it cannot do the split with the same model. OpenAI Whisper plus a separate model was rejected in explore: two providers, and the definition asks for the same model.
 - Audio up to about 15MB is sent inline. Larger files go through the Gemini Files API, which handles the rest of the 25MB limit.
 - Gemini can briefly return `503 UNAVAILABLE` on the free tier. The client retries up to 3 times with a short backoff, and the total time is capped by a timeout so the 60-second limit holds.
 - The split prompt and its JSON schema are kept in `stt.py`, so tests can replace both calls with fixed responses.
@@ -120,8 +121,5 @@ pytest with FastAPI's `TestClient`. Each test gets a fresh SQLite database. `stt
 - [Transcription can approach the 60-second limit, and the serverless function's own time limit] → Set the function's maximum duration above 60 seconds in the Vercel config, keep the client timeout at 60 seconds, and report a timeout as an error the screen can show.
 - [The model can invent owners or decisions] → The prompt and schema allow empty lists and null owners, owner names must match a member, and the screen lets the user edit everything.
 - [Free-tier Gemini returns `503` under load] → Retry with backoff, then report the failure so the user can try again.
+- [Flash-Lite may give a weaker split, such as missing to-dos or vaguer summaries, than larger models] → Check the split of `회의_녹음.wav` against its script `회의_대본.txt` in stage 4. If it is not good enough, set `STT_MODEL=gemini-3.8-flash`. No code changes.
 - [Tailwind's CDN build is meant for development] → Accepted, as in the definition. Moving to a compiled stylesheet is a later change.
-
-## Open Questions
-
-- The exact Gemini model name for `STT_MODEL`. It is confirmed against the available model list when building `stt.py` and can be changed through the environment variable without changing specs or tasks.
